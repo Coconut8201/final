@@ -1,0 +1,89 @@
+class UseRat{
+    static void teleM(int n){
+        Rational a1;
+        Rational a2 = new Rational(1);
+
+        for (int i = 1; i < n; i++) {
+            a1 = new Rational(i,i+1);
+            a2.mulBy(a1);
+            //D System.out.println("a1= " + a1);
+        }
+        a2.reduce();
+        System.out.println(a2);
+        
+    }
+    static void cont(int n){
+        /*3+ 1/4 = 13/4
+         * z1=3, z2=1/4, z3=13/4
+        */
+        Rational z1;
+        Rational z2 = new Rational(1, n); //1/4
+        Rational z3 = new Rational();
+        for(int i=n-1; i>0; i--){
+            z1 = new Rational(i,1); //3
+            z3 = z1.add(z2);
+            z2 = new Rational(z3.b, z3.a);
+            //D System.out.println("z1 = " + z1);
+            //D System.out.println("z2 = " + z2);
+            //D System.out.println("z3 = " + z3);
+        }
+        System.out.println(z3);
+    }
+}
+class Rational{
+    long a;
+    long b;
+    Rational(long n){
+        this.a=n;
+        this.b=1;
+    }
+    Rational(){
+        this.a=0;
+        this.b=1;
+    }
+    Rational(long x, long y){
+        this.a=x;
+        this.b =y;
+    }
+    //乘法
+    void mulBy(Rational p2){
+        this.a*= p2.a;
+        this.b*= p2.b;
+        reduce();
+    }
+    //最大公因數
+    public static long  gcd(long a, long b){
+        long r=0; //最大公因數
+        while (b != 0) {
+            r = b;
+            b = a % b;
+            a = r;
+        }
+        return r;
+    }
+    //約分
+    Rational reduce(){
+        long r; //除數
+        r=gcd(this.a, this.b);
+        //D System.out.println("r="+r);
+        this.a/=r;
+        this.b/=r;
+        return new Rational(this.a, this.b);
+    }
+    Rational add(Rational p2){
+        Rational ans = new Rational();
+        ans.a = this.a*p2.b+this.b*p2.a;
+        ans.b = this.b*p2.b;
+        return ans;
+    }
+    @Override
+    public String toString(){
+        return this.a+"/"+this.b;
+    }
+}
+class Test2{
+    public static void main(String[] args){
+        UseRat.teleM(4);
+        UseRat.cont(4);
+    }
+}
